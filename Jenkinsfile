@@ -7,22 +7,21 @@ pipeline {
         sh ' echo "First Stage" '
         sh ' sudo docker build -t pym . '
         sh ' sudo docker run -ti -d -p 8000:8000 pym '
+      }
     }
-
     stage('Second') {
       steps {
         sh ' echo "Updating Second Stage" '
         sh '  '
       }
     }
-
     stage('Third') {
       environment {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
         ORGANIZATION = "DebanhiRosiles"
         PROJECT_NAME = "DOTT"
       } 
-    steps {
+      steps {
         withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Third Stage" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
@@ -30,7 +29,7 @@ pipeline {
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.'''
         }
+      }
     }
-
   }
 }
