@@ -1,20 +1,6 @@
 pipeline {
   agent any
   stages {
-    stage('First') {
-      steps {
-        sh ' cd /home/cloud_user/DOTT/python/ '
-        sh ' echo "First Stage" '
-        sh ' sudo docker build -t pym . '
-        sh ' sudo docker run -ti -d -p 8000:8000 pym '
-      }
-    }
-    stage('Second') {
-      steps {
-        sh ' echo "Updating Second Stage" '
-        sh '  '
-      }
-    }
     stage('Third') {
       environment {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
@@ -29,6 +15,22 @@ pipeline {
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.'''
         }
+      }
+    }
+    stage('Second') {
+      steps {
+        sh ' echo "Second Stage" '
+        sh ' cd /home/cloud_user/DOTT/python/ '
+        sh '  python api.py'
+      }
+    }
+    
+    stage('First') {
+      steps {
+        sh ' cd /home/cloud_user/DOTT/python/ '
+        sh ' echo "First Stage" '
+        sh ' sudo docker build -t pym . '
+        sh ' sudo docker run -ti -d -p 8000:8000 pym '
       }
     }
   }
