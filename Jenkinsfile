@@ -17,6 +17,7 @@ pipeline {
         }
       }
     }
+    
     stage('Second') {
       steps {
         sh ' echo "Second Stage" '
@@ -33,5 +34,6 @@ pipeline {
         sh ' sudo docker run -ti -d -p 8000:8000 pym '
       }
     }
+    
   }
 }
