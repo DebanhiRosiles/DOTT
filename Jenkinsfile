@@ -38,7 +38,6 @@ pipeline {
             -Dsonar.sources=. \
             -Dsonar.python.coverage.reportPaths=*.xml'''
         }
-        sh ' python api.py'
       }
     }
     
