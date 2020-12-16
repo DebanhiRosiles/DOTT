@@ -25,16 +25,14 @@ pipeline {
         sh ' sudo docker build -d pym . '
         sh ' sudo docker run -p 8000:8000 pym '
       }
-       
+    }   
+    
     stage('Second') {
       steps {
         sh ' echo "Second Stage" '
         sh ' cd /home/cloud_user/DOTT/python/ '
         sh ' python api.py'
       }
-    }
-    
-   
     }
     
   }
