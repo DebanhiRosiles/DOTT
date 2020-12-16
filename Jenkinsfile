@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  stages {
    stage('First') {
       steps {
         sh ' cd /home/cloud_user/DOTT/python/ '
@@ -44,7 +45,7 @@ pipeline {
         }//end SonarQube proccess
       }//end steps
     }// End stage Second
-  stages {
+  
     stage('Third') {
       environment {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
@@ -61,5 +62,5 @@ pipeline {
         }//end SonarQube proccess
       }//end steps
     }//end stage Third
-  }
-}
+  }//end stages
+}//end pipeline
