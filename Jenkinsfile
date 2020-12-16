@@ -19,6 +19,11 @@ pipeline {
     }
     
      stage('Second') {
+       environment {
+        SCANNER_HOME = tool 'FP-sonarCloud-scanner'
+        ORGANIZATION = "debanhirosiles"
+        PROJECT_NAME = "DebanhiRosiles_DOTT"
+      } 
       steps {
         sh ' echo "Second Stage" '
         sh ' cd /home/cloud_user/DOTT/python/ '
