@@ -29,7 +29,7 @@ pipeline {
         sh ' cd /home/cloud_user/DOTT/python/ '
         sh ' sudo apt install python3-pip'
         sh ' sudo python3 -m pip install coverage '
-        sh ' coverage run tests.py '
+        sh ' coverage run /home/cloud_user/DOTT/python/tests.py '
         sh ' coverage report -m tests.py '
         sh ' coverage xml '
         withSonarQubeEnv('FP-sonarCloud-server') {
