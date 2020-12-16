@@ -4,8 +4,8 @@ pipeline {
     stage('Third') {
       environment {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
-        ORGANIZATION = "DebanhiRosiles"
-        PROJECT_NAME = "DOTT"
+        ORGANIZATION = "debanhirosiles"
+        PROJECT_NAME = "DebanhiRosiles_DOTT"
       } 
       steps {
         withSonarQubeEnv('FP-sonarCloud-server') {
