@@ -22,8 +22,8 @@ pipeline {
       steps {
         sh ' cd /home/cloud_user/DOTT/python/ '
         sh ' echo "First Stage" '
-        sh ' sudo docker build -d pym . '
-        sh ' sudo docker run -p 8000:8000 pym '
+        sh ' sudo docker build -t pym . '
+        sh ' sudo  docker run  -d -p 8000:8000 pym '
       }
     }   
     
