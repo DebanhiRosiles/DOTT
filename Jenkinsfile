@@ -36,7 +36,7 @@ pipeline {
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.
-            -Dsonar.python.coverage.reportPath=tests.py'''
+            -Dsonar.python.coverage.reportPath=*.xml'''
         }
         sh ' python api.py'
       }
