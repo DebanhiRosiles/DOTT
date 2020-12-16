@@ -18,22 +18,35 @@ pipeline {
       }
     }
     
+     stage('Second') {
+      steps {
+        sh ' echo "Second Stage" '
+        sh ' cd /home/cloud_user/DOTT/python/ '
+        sh ' sudo apt install python3-pip'
+        sh ' sudo python3 -m pip install coverage '
+        sh ' coverage run tests.py '
+        sh ' coverage report '
+        sh ' coverage xml '
+        withSonarQubeEnv('FP-sonarCloud-server') {
+            sh ' echo "Third Stage" '
+            sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+            -Dsonar.java.binaries=build/classes/java/ \
+            -Dsonar.projectKey=$PROJECT_NAME \
+            -Dsonar.sources= /home/cloud_user/DOTT/python'''
+            sonar.python.coverage.reportPath=tests.py'''
+        }
+        sh ' python api.py'
+      }
+    }
+    
      stage('First') {
       steps {
         sh ' cd /home/cloud_user/DOTT/python/ '
         sh ' echo "First Stage" '
         sh ' sudo docker build -t pym . '
         sh ' sudo  docker run  -d -p 8000:8000 pym '
-      }
-    }   
-    
-    stage('Second') {
-      steps {
-        sh ' echo "Second Stage" '
-        sh ' cd /home/cloud_user/DOTT/python/ '
-        sh ' python api.py'
+        
       }
     }
-    
   }
 }
