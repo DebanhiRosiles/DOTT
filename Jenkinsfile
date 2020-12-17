@@ -72,7 +72,7 @@ pipeline {
                   sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
                   -Dsonar.projectKey=$PROJECT_NAME \
-                  -Dsonar.python.coverage.reportPaths=**/coverage.xml '''
+                  -Dsonar.python.coverage.reportPaths=**/*.xml '''
                 }//end SonarQube proccess
               }//end {} in script
             }//end script
