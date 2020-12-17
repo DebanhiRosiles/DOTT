@@ -3,7 +3,7 @@ pipeline {
   stages {
    stage('First') {
       steps {
-        sh ' cd $WORSKPACE/python/ '
+        sh ' cd python/ '
         sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
         script{   
             try{
