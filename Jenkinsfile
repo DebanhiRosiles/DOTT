@@ -64,18 +64,19 @@ pipeline {
                   credentialsId: 'SC_Org',
                   variable: 'ORGANIZATION'
                 ),
+                
               ])
               {
                 sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report | coverage xml '//do coverage xml  
                 sh 'cat coverage.xml'
-                sh 'pwd'
+                sh 'cd $WORKSPACE '
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
                   -Dsonar.projectKey=$PROJECT_NAME \
                   -Dsonar.sources=. \
                   -Dsonar.language=py \
-                  -Dsonar.python.coverage.reportPath={$WORSKPACE/}coverage.xml '''
+                  -Dsonar.python.coverage.reportPath=coverage.xml '''
                 }//end SonarQube proccess
               }//end {} in script
             }//end script
