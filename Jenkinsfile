@@ -50,7 +50,7 @@ pipeline {
       } //end environment var 
       steps {
             sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-            sh ' cd $WORSKPACE/python/ '
+            sh ' cd python/ '
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
             
