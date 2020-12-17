@@ -13,7 +13,7 @@ pipeline {
                try{
                 sh ' sudo lsof -8000'
                }//end try to check port be in use
-              catch(exc){
+               catch(exc){
                 sh ' echo "Making build of IMAGE to run" ' 
                 sh ' sudo docker build -t pym . '
                 sh ' sudo  docker run  -d -p 8000:8000 pym '
