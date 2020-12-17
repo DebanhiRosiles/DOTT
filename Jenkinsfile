@@ -51,6 +51,12 @@ pipeline {
       steps {
             sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
             sh ' cd /home/cloud_user/DOTT/python/ '
+            try{
+                sh ' sudo pip3 --version '
+              }
+              catch(exc){
+                sh ' sudo apt install python3-pip'
+              }
             script{
               withCredentials([
                 string(
@@ -62,12 +68,6 @@ pipeline {
                   variable: 'ORGANIZATION'
                 ),
               ])
-              try{
-                sh ' sudo pip3 --version '
-              }
-              catch(exc){
-                sh ' sudo apt install python3-pip'
-              }
               {
                 sh ' sudo python3 -m pip install coverage '
                 sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
