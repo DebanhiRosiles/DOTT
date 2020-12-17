@@ -74,7 +74,8 @@ pipeline {
                   -Dsonar.java.binaries=build/classes/java/ \
                   -Dsonar.projectKey=$PROJECT_NAME \
                   -Dsonar.sources=. \
-                  -Dsonar.python.coverage.reportPaths=${WORSKPACE}/coverage.xml/*.xml '''
+                  -Dsonar.language=py \
+                  -Dsonar.python.coverage.reportPaths=${WORSKPACE}/coverage.xml '''
                 }//end SonarQube proccess
               }//end {} in script
             }//end script
