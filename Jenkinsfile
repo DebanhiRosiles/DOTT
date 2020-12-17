@@ -6,20 +6,19 @@ pipeline {
         sh ' cd /home/cloud_user/DOTT/python/ '
         sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
         script{   
-          try{
-            sh ' sudo lsof -8000'
             try{
               sh ' sudo docker image inspect pym:latest'
-            }//end try inspect image
+            }//end try check image
             catch(exc){
-              sh ' echo "Making build of IMAGE to run" ' 
-              sh ' sudo docker build -t pym . '
-              sh ' sudo  docker run  -d -p 8000:8000 pym '
-            }//end catch image
-          }//end try port in use or build
-          catch(exc){
-              sh ' echo "Error: check port 8000 was assigned before" ' 
-          }//end catch error port assign
+               try{
+                sh ' sudo lsof -8000'
+               }//end try to check port be in use
+              catch(exc){
+                sh ' echo "Making build of IMAGE to run" ' 
+                sh ' sudo docker build -t pym . '
+                sh ' sudo  docker run  -d -p 8000:8000 pym '
+              }//end catch to build and run image
+            }//end catch to check port avaliable
         }//end script
       }//end step 
     }//end first stage
