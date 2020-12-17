@@ -25,11 +25,11 @@ pipeline {
           withCredentials([
             string(
               credentialsId: 'SC_Proyect'
-              env.variable: 'PROJECT_NAME'
+              variable: 'PROJECT_NAME'
             ),
             string(
               credentialsId: 'SC_Org'
-              env.variable: 'ORGANIZATION'
+              variable: 'ORGANIZATION'
             ),
           ])
         }
