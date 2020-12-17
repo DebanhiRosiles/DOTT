@@ -51,13 +51,9 @@ pipeline {
       steps {
             sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
             sh ' cd /home/cloud_user/DOTT/python/ '
+            sh ' sudo apt install python3-pip'
+            sh ' sudo python3 -m pip install coverage '
             script{
-              try{
-                sh ' sudo pip3 --version '
-              }
-              catch(exc){
-                sh ' sudo apt install python3-pip'
-              }
               withCredentials([
                 string(
                   credentialsId: 'SC_Proyect',
@@ -69,8 +65,8 @@ pipeline {
                 ),
               ])
               {
-                sh ' sudo python3 -m pip install coverage '
                 sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
+                cat ' coverage.xml'
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
@@ -83,4 +79,3 @@ pipeline {
     }//end stage Third
   }//end stages
 }//end pipeline
-}
