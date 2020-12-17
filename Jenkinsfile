@@ -32,8 +32,6 @@ pipeline {
               variable: 'ORGANIZATION'
             ),
           ]){
-            env.$ORGANIZATION
-            env.$PROJECT_NAME
             withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
@@ -47,25 +45,40 @@ pipeline {
     }// End stage Second
   
     stage('Third') {
+      steps { environment {
+        SCANNER_HOME = tool 'FP-sonarCloud-scanner'
+      } //end environment var 
       steps {
-        sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-        sh ' cd /home/cloud_user/DOTT/python/ '
-        script{
-           try{
-             sh ' sudo pip3 --version '
-           }
-          catch(exc){
-            sh ' sudo apt install python3-pip'
-          }
-        }//end script
-        sh ' sudo python3 -m pip install coverage '
-        sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
-        withSonarQubeEnv('FP-sonarCloud-server') {
-            sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
-            -Dsonar.java.binaries=build/classes/java/ \
-            -Dsonar.projectKey=$PROJECT_NAME \
-            -Dsonar.python.coverage.reportPaths=**/coverage.xml '''
-        }//end SonarQube proccess
+            sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
+            sh ' cd /home/cloud_user/DOTT/python/ '
+            script{
+              withCredentials([
+                string(
+                  credentialsId: 'SC_Proyect',
+                  variable: 'PROJECT_NAME'
+                ),
+                string(
+                  credentialsId: 'SC_Org',
+                  variable: 'ORGANIZATION'
+                ),
+              ])
+              try{
+                sh ' sudo pip3 --version '
+              }
+              catch(exc){
+                sh ' sudo apt install python3-pip'
+              }
+              {
+                sh ' sudo python3 -m pip install coverage '
+                sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
+                withSonarQubeEnv('FP-sonarCloud-server') {
+                  sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+                  -Dsonar.java.binaries=build/classes/java/ \
+                  -Dsonar.projectKey=$PROJECT_NAME \
+                  -Dsonar.python.coverage.reportPaths=**/coverage.xml '''
+                }//end SonarQube proccess
+              }//end {} in script
+            }//end script
       }//end steps
     }//end stage Third
   }//end stages
