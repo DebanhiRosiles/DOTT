@@ -21,7 +21,6 @@ pipeline {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
       } //end environment var 
       steps {
-        
         script{
           withCredentials([
             string(
@@ -33,11 +32,22 @@ pipeline {
               variable: 'ORGANIZATION'
             ),
           ])
-          env.PROJECT_NAME
-          env.ORGANIZATION
         }//script end
+        withSonarQubeEnv('FP-sonarCloud-server') {
+            sh ' echo "Second Stage> make a test on SonarCloud" '
+            sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+            -Dsonar.java.binaries=build/classes/java/ \
+            -Dsonar.projectKey=$PROJECT_NAME \
+            -Dsonar.sources=.'''
+        }//end SonarQube proccess
         
-        sh ' echo "Second Stage: make a coverage xml for the tests.py and send to sonarCloud" '
+        
+      }//end steps
+    }// End stage Second
+  
+    stage('Third') {
+      steps {
+        sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
         sh ' cd /home/cloud_user/DOTT/python/ '
         script{
            try{
@@ -47,8 +57,6 @@ pipeline {
             sh ' sudo apt install python3-pip'
           }
         }//end script
-        
-       
         sh ' sudo python3 -m pip install coverage '
         sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
         withSonarQubeEnv('FP-sonarCloud-server') {
@@ -56,18 +64,6 @@ pipeline {
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.python.coverage.reportPaths=**/coverage.xml '''
-        }//end SonarQube proccess
-      }//end steps
-    }// End stage Second
-  
-    stage('Third') {
-      steps {
-        withSonarQubeEnv('FP-sonarCloud-server') {
-            sh ' echo "Third Stage> make a test on SonarCloud" '
-            sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
-            -Dsonar.java.binaries=build/classes/java/ \
-            -Dsonar.projectKey=$PROJECT_NAME \
-            -Dsonar.sources=.'''
         }//end SonarQube proccess
       }//end steps
     }//end stage Third
