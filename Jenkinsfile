@@ -45,7 +45,7 @@ pipeline {
     }// End stage Second
   
     stage('Third') {
-      steps { environment {
+      environment {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
       } //end environment var 
       steps {
@@ -53,6 +53,7 @@ pipeline {
             sh ' cd /home/cloud_user/DOTT/python/ '
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
+            
             script{
               withCredentials([
                 string(
@@ -66,7 +67,7 @@ pipeline {
               ])
               {
                 sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
-                cat ' coverage.xml'
+                //cat ' coverage.xml'
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
@@ -75,7 +76,7 @@ pipeline {
                 }//end SonarQube proccess
               }//end {} in script
             }//end script
-      }//end steps
+        }//end steps
     }//end stage Third
   }//end stages
 }//end pipeline
