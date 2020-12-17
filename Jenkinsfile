@@ -32,14 +32,13 @@ pipeline {
               variable: 'ORGANIZATION'
             ),
           ])
-       
-        withSonarQubeEnv('FP-sonarCloud-server') {
+          withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.'''
-            }//end SonarQube proccess
+           }//end SonarQube proccess
         }//script end
       }//end steps
     }// End stage Second
