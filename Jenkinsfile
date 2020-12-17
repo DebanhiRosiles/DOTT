@@ -10,7 +10,7 @@ pipeline {
               sh ' sudo docker build -t pym . '
             }//end try check image
             catch(exc){
-               
+               sh ' echo "Couldnt build the image" '
             }//end catch to check port avaliable
         }//end script
       }//end step 
