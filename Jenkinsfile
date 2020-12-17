@@ -24,11 +24,11 @@ pipeline {
         script{
           withCredentials([
             string(
-              credentialsId: 'SC_Proyect'
+              credentialsId: 'SC_Proyect',
               variable: 'PROJECT_NAME'
             ),
             string(
-              credentialsId: 'SC_Org'
+              credentialsId: 'SC_Org',
               variable: 'ORGANIZATION'
             ),
           ])
