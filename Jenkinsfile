@@ -21,6 +21,7 @@ pipeline {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
       } //end environment var 
       steps {
+        
         script{
           withCredentials([
             string(
@@ -32,16 +33,22 @@ pipeline {
               variable: 'ORGANIZATION'
             ),
           ])
-        }
+          env.PROJECT_NAME
+          env.ORGANIZATION
+        }//script end
+        
         sh ' echo "Second Stage: make a coverage xml for the tests.py and send to sonarCloud" '
         sh ' cd /home/cloud_user/DOTT/python/ '
+        script{
+           try{
+             sh ' sudo pip3 --version '
+           }
+          catch(exc){
+            sh ' sudo apt install python3-pip'
+          }
+        }//end script
         
-        try{
-          sh ' sudo pip3 --version '
-        }
-        catch(exc){
-          sh ' sudo apt install python3-pip'
-        }
+       
         sh ' sudo python3 -m pip install coverage '
         sh ' coverage run -m pytest /home/cloud_user/DOTT/python/tests.py -v | coverage report | coverage xml '//do coverage xml  
         withSonarQubeEnv('FP-sonarCloud-server') {
