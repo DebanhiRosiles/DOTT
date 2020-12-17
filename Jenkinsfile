@@ -3,7 +3,7 @@ pipeline {
   stages {
    stage('First') {
       steps {
-        sh ' cd ${WORSKPACE}/python/ '
+        sh ' cd $WORSKPACE/python/ '
         sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
         script{   
             try{
@@ -50,7 +50,7 @@ pipeline {
       } //end environment var 
       steps {
             sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-            sh ' cd ${WORSKPACE}/python/ '
+            sh ' cd $WORSKPACE/python/ '
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
             
@@ -66,7 +66,7 @@ pipeline {
                 ),
               ])
               {
-                sh ' coverage run -m pytest ${WORSKPACE}/tests.py -v | coverage report | coverage xml '//do coverage xml  
+                sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report | coverage xml '//do coverage xml  
                 sh 'cat coverage.xml'
                 sh 'pwd'
                 withSonarQubeEnv('FP-sonarCloud-server') {
