@@ -51,13 +51,13 @@ pipeline {
       steps {
             sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
             sh ' cd /home/cloud_user/DOTT/python/ '
-            try{
+            script{
+              try{
                 sh ' sudo pip3 --version '
               }
               catch(exc){
                 sh ' sudo apt install python3-pip'
               }
-            script{
               withCredentials([
                 string(
                   credentialsId: 'SC_Proyect',
