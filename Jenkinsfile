@@ -58,7 +58,7 @@ pipeline {
       }//end when
       
       steps{
-        env.CONTAINER_ID= sh(script:"sudo docker ps | grep ash | grep apy.py | awk '{print $1}'", returnStdout: true).trim()
+        env.CONTAINER_ID= sh(script:"sudo docker ps | grep ash | grep apy.py | awk '{print \$1}'", returnStdout: true).trim()
         sh 'echo "Deployment stage starts" '
         script{
           try{
