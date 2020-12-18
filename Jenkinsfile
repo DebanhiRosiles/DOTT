@@ -60,8 +60,7 @@ pipeline {
         sh 'echo "Deployment stage starts" '
         script{
           try{
-            
-            sh ' docker rm -f $(sudo docker ps | grep ash | grep apy.py | awk \'{print $1}\') '
+            sh ' docker rm -f $(sudo docker ps | grep ash | grep pym | awk \'{print $1}\') '
             sh ' docker run -d -p 8000:8000 pym'          
           }catch(docRun){
             sh 'echo "PYM docker image is not running" '
