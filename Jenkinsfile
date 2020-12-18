@@ -74,8 +74,7 @@ pipeline {
                 sh ' pwd '
                 sh ' echo $WORKSPACE '
                 withSonarQubeEnv('FP-sonarCloud-server') {
-                  sh '''pwd
-                  ls
+                  sh '''
                   $SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
                   -Dsonar.projectKey=$PROJECT_NAME \
