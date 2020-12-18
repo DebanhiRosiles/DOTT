@@ -25,18 +25,17 @@ pipeline {
           
      script{
        withCredentials([
-         string(
+         env.PROJECT_NAME= string(
            credentialsId: 'SC_Proyect',
            variable: 'PN'  ),
-         string(
+         env.ORGANIZATION= string(
            credentialsId: 'SC_Org',
            variable: 'ORG'
          ),
         ])
      }//end script
           {
-            env.ORGANIZATION=$ORG
-            env.PROJECT_NAME=$PN
+            
             withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
