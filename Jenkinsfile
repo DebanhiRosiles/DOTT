@@ -33,14 +33,14 @@ pipeline {
    stage('Second') {
       steps {
         script{
-          {
+          //{
             withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.'''
-           }//end SonarQube proccess
+          // }//end SonarQube proccess
            }
         }//script end
       }//end steps
@@ -49,7 +49,7 @@ pipeline {
     stage('Third') {
       steps {
             script{
-              {
+            //  {
                 sh ' cd $WORKSPACE '
                 sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
                 sh ' sudo apt install python3-pip'
@@ -63,7 +63,7 @@ pipeline {
                   -Dsonar.python.coverage.reportPaths=$WORKSPACE/coverage.xml'''
                 }//end SonarQube proccess||*cov*.xml
                 
-              }//end {} in script
+             // }//end {} in script
                  // -Dsonar.sources=. \
                   //-Dsonar.language=py \
             }//end script
