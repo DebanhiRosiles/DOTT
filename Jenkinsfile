@@ -7,10 +7,11 @@ pipeline {
    stage('Build') {
       steps {
         sh ' cd python/ '
-        sh ' ls'
+        
         sh ' echo "First Stage: try to build IMAGE Dockerfile " '
         script{   
             try{
+              sh ' ls'
               sh '  docker build -t pym . '
             }//end try check image
             catch(exc){
