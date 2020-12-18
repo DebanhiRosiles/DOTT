@@ -50,6 +50,9 @@ pipeline {
               -Dsonar.projectKey=$PROJECT_NAME \
               -Dsonar.python.coverage.reportPaths=$WORKSPACE/coverage.xml'''
             }//end SonarQube proccess||*cov*.xml
+             timeout(time: 6, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
             env.QG=waitForQualityGate().status
           }//end {} in script
           // -Dsonar.sources=. \
