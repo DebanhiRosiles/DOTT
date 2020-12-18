@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment {
      SCANNER_HOME = tool 'FP-sonarCloud-scanner'
+    DOCKERIMAGE_ID= sh(script:"sudo docker ps | grep ash | grep apy.py | awk '{print \$1}'", returnStdout: true).trim()
    } //end environment var 
   stages {
    stage('Build') {
@@ -56,19 +57,12 @@ pipeline {
       when{ 
         environment name: 'QG', value: 'OK'
       }//end when
-      environment {
-        CONTAINER_ID = sh(script:"sudo docker ps | grep ash | grep apy.py | awk '{print \$1}'", returnStdout: true).trim()
-      }
       steps{
         sh 'echo "Deployment stage starts" '
         script{
           try{
-            sh ' docker rm -f $CONTAINER_ID '
-            try{
-              sh ' docker run -d -p 8000:8000 pym'
-            }catch(portAv){
-               sh 'echo "check if is avalaiable the port or change port" '
-            }
+            sh ' docker rm -f $DOCKERIMAGE_ID '
+            sh ' docker run -d -p 8000:8000 pym'          
           }catch(docRun){
             sh 'echo "PYM docker image is not running" '
             try{
