@@ -67,15 +67,14 @@ pipeline {
         script{
           try{
             sh ' docker rm -f $(sudo docker ps | grep ash | awk \'{print $1}\') '
-            sh ' docker run -d -p 8000:8000 pym'          
           }catch(docRun){
             sh 'echo "PYM docker image is not running" '
-            try{
+          }
+           try{
               sh ' docker run -d -p 8000:8000 pym'
             }catch(portDen){
                sh 'echo "check if is avalaiable the port or change port" '
             }
-          }
         }//end script
       }//end steps
     }//end stage Deployment
