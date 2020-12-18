@@ -33,9 +33,9 @@ pipeline {
           {
             sh ' cd $WORKSPACE '
             sh ' echo "SonarCloudTest Stage: make a coverage xml for the tests.py (unit-test) and send to sonarCloudv " '
-            sh ' apt install python3-pip'
-            sh ' python3 -m pip install coverage '
-            sh ' python3 -m pip install pytest '
+            sh ' sudo apt install python3-pip'
+            sh ' sudo python3 -m pip install coverage '
+            sh ' sudo python3 -m pip install pytest '
             sh ' coverage run -m pytest python/tests.py -v | coverage report | coverage xml'
             withSonarQubeEnv('FP-sonarCloud-server') {
               sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
