@@ -6,7 +6,7 @@ pipeline {
   stages {
    stage('First') {
       steps {
-        sh 'docker ps'
+        sh 'whoami'
         sh ' cd python/ '
         sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
         script{   
