@@ -67,7 +67,7 @@ pipeline {
                 
               ])
               {
-                sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report | coverage xml '//do coverage xml  
+                sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report -m $WORSKPACE/tests.py | coverage xml '//do coverage xml  
                 sh 'cat coverage.xml'
                 sh 'cd $WORKSPACE '
                 sh ' pwd '
