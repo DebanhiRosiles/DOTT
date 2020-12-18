@@ -6,10 +6,10 @@ pipeline {
   stages {
    stage('Build') {
       steps {
-        sh ' cd $WORKPLACE/'
+        sh ' cd $WORKPLACE'
         sh ' echo "First Stage: try to build IMAGE Dockerfile " '
         script{   
-            try{sh ' cd $WORKPLACE/python/ '
+            try{
               sh ' ls'
               sh '  docker build $WORKPLACE/python/ -t pym . '
             }//end try check image
