@@ -78,7 +78,7 @@ pipeline {
                   -Dsonar.projectKey=$PROJECT_NAME \
                   -Dsonar.sources=. \
                   -Dsonar.language=py \
-                  -Dsonar.python.coverage.reportPaths=generated-reports/*cov*.xml'''
+                  -Dsonar.python.coverage.reportPaths=*cov*.xml'''
                 }//end SonarQube proccess||../coverage.xml
               }//end {} in script
             }//end script
