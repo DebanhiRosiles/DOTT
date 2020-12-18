@@ -37,7 +37,8 @@ pipeline {
               variable: 'ORGANIZATION'  ),
           ])
           {
-            sh ' cd $WORKSPACE '
+            sh ' cd $WORKSPACE/ '
+            sh ' pwd '
             sh ' echo "SonarCloudTest Stage: make a coverage xml for the tests.py (unit-test) and send to sonarCloudv " '
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
