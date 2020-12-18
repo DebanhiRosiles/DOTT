@@ -49,12 +49,6 @@ pipeline {
         SCANNER_HOME = tool 'FP-sonarCloud-scanner'
       } //end environment var 
       steps {
-            sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-            sh ' cd python/ '
-            sh ' sudo apt install python3-pip'
-            sh ' sudo python3 -m pip install coverage '
-            sh ' sudo python3 -m pip install pytest '
-            
             script{
               withCredentials([
                 string(
@@ -68,6 +62,10 @@ pipeline {
                 
               ])
               {
+                sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
+                sh ' sudo apt install python3-pip'
+                sh ' sudo python3 -m pip install coverage '
+                sh ' sudo python3 -m pip install pytest '
                 sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report | coverage xml'
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''
