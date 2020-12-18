@@ -73,7 +73,8 @@ pipeline {
            try{
               sh ' docker run -d -p 8000:8000 pym'
             }catch(portDen){
-               sh 'echo "check if is avalaiable the port or change port" '
+               sh 'echo "The port 8000 is not avalaiable" '
+               sh ' docker run -d pym'
             }
         }//end script
       }//end steps
