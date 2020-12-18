@@ -20,20 +20,16 @@ pipeline {
     }//end first stage
   
    stage('Second') {
-      steps {
-        script{
-          
+      steps {          
      script{
        withCredentials([
-         env.PROJECT_NAME= string(
+         string(
            credentialsId: 'SC_Proyect',
-           variable: 'PN'  ),
-         env.ORGANIZATION= string(
-           credentialsId: 'SC_Org',
-           variable: 'ORG'
+           variable: 'PROJECT_NAME'  ),
+         env.ORGANIZATION=string(
+           credentialsId: 'SC_Org'
          ),
         ])
-     }//end script
           {
             
             withSonarQubeEnv('FP-sonarCloud-server') {
