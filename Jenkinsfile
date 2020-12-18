@@ -6,6 +6,7 @@ pipeline {
   stages {
    stage('First') {
       steps {
+        sh 'docker ps'
         sh ' cd python/ '
         sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
         script{   
@@ -82,6 +83,23 @@ pipeline {
       }//end when
       steps{
         sh 'echo "Deployment stage starts" '
+        script{
+          try{
+            sh 'docker rm -f < sudo docker ps | grep ash | grep apy.py | awk "{print $1}" '
+            try{
+              sh 'docker run -d -p 8000:8000 pym'
+            }catch(portAv){
+               sh 'echo "check if is avalaiable the port or change port" '
+            }
+          }catch(docRun){
+            sh 'echo "PYM docker image is not running, check if is avalaiable the port or change port" '
+            try{
+              sh 'docker run -d -p 8000:8000 pym'
+            }catch(portDen){
+               sh 'echo "check if is avalaiable the port or change port" '
+            }
+          }
+        }//end script
       }//end steps
     }//end stage Deployment
   }//end stages
