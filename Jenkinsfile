@@ -2,7 +2,17 @@ pipeline {
   agent any
   environment {
      SCANNER_HOME = tool 'FP-sonarCloud-scanner'
-  } //end environment var 
+     script{
+       withCredentials([
+         string(
+           credentialsId: 'SC_Proyect',
+           variable: 'PROJECT_NAME'  ),
+         string(
+           credentialsId: 'SC_Org',
+           variable: 'ORGANIZATION'
+         ),
+     }//end script
+   } //end environment var 
   stages {
    stage('First') {
       steps {
@@ -22,16 +32,7 @@ pipeline {
    stage('Second') {
       steps {
         script{
-          withCredentials([
-            string(
-              credentialsId: 'SC_Proyect',
-              variable: 'PROJECT_NAME'
-            ),
-            string(
-              credentialsId: 'SC_Org',
-              variable: 'ORGANIZATION'
-            ),
-          ]){
+          {
             withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
@@ -47,17 +48,6 @@ pipeline {
     stage('Third') {
       steps {
             script{
-              withCredentials([
-                string(
-                  credentialsId: 'SC_Proyect',
-                  variable: 'PROJECT_NAME'
-                ),
-                string(
-                  credentialsId: 'SC_Org',
-                  variable: 'ORGANIZATION'
-                ),
-                
-              ])
               {
                 sh ' cd $WORKSPACE '
                 sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
