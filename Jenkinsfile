@@ -53,6 +53,7 @@ pipeline {
             sh ' cd python/ '
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
+            sh ' sudo python3 -m pip install pytest '
             
             script{
               withCredentials([
