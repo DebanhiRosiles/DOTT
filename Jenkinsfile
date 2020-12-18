@@ -4,14 +4,13 @@ pipeline {
      SCANNER_HOME = tool 'FP-sonarCloud-scanner'
    } //end environment var 
   stages {
-   stage('First') {
+   stage('Build') {
       steps {
-        sh 'docker ps'
         sh ' cd python/ '
-        sh ' echo "First Stage: check that the IMAGE Dockerfile its runing" '
+        sh ' echo "First Stage: try to build IMAGE Dockerfile " '
         script{   
             try{
-              sh ' sudo docker build -t pym . '
+              sh '  docker build -t pym . '
             }//end try check image
             catch(exc){
                sh ' echo "Couldnt build the image" '
@@ -19,33 +18,8 @@ pipeline {
         }//end script
       }//end step 
     }//end first stage
-  
-   stage('Second') {
-      steps {  
-        script{
-          withCredentials([
-            string(
-              credentialsId: 'SC_Proyect',
-              variable: 'PROJECT_NAME'  ),
-            string(
-              credentialsId: 'SC_Org',
-              variable: 'ORGANIZATION'  ),
-          ])
-          {
-            
-            withSonarQubeEnv('FP-sonarCloud-server') {
-            sh ' echo "Second Stage> make a test on SonarCloud" '
-            sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
-            -Dsonar.java.binaries=build/classes/java/ \
-            -Dsonar.projectKey=$PROJECT_NAME \
-            -Dsonar.sources=.'''
-           }//end SonarQube proccess
-           }
-        }//script end
-      }//end steps
-    }// End stage Second
-  
-    stage('Third') {
+    
+    stage('SonarCloudTest') {
       steps {
         script{
           withCredentials([
@@ -58,10 +32,10 @@ pipeline {
           ])
           {
             sh ' cd $WORKSPACE '
-            sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-            sh ' sudo apt install python3-pip'
-            sh ' sudo python3 -m pip install coverage '
-            sh ' sudo python3 -m pip install pytest '
+            sh ' echo "SonarCloudTest Stage: make a coverage xml for the tests.py (unit-test) and send to sonarCloudv " '
+            sh ' apt install python3-pip'
+            sh ' python3 -m pip install coverage '
+            sh ' python3 -m pip install pytest '
             sh ' coverage run -m pytest python/tests.py -v | coverage report | coverage xml'
             withSonarQubeEnv('FP-sonarCloud-server') {
               sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
@@ -85,16 +59,16 @@ pipeline {
         sh 'echo "Deployment stage starts" '
         script{
           try{
-            sh 'sudo docker rm -f < sudo docker ps | grep ash | grep apy.py | awk "{print $1}" '
+            sh ' docker rm -f < sudo docker ps | grep ash | grep apy.py | awk "{print $1}" '
             try{
-              sh 'sudo docker run -d -p 8000:8000 pym'
+              sh ' docker run -d -p 8000:8000 pym'
             }catch(portAv){
                sh 'echo "check if is avalaiable the port or change port" '
             }
           }catch(docRun){
             sh 'echo "PYM docker image is not running" '
             try{
-              sh 'sudo docker run -d -p 8000:8000 pym'
+              sh ' docker run -d -p 8000:8000 pym'
             }catch(portDen){
                sh 'echo "check if is avalaiable the port or change port" '
             }
