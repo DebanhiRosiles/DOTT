@@ -74,12 +74,14 @@ pipeline {
                 sh ' pwd '
                 sh ' echo $WORKSPACE '
                 withSonarQubeEnv('FP-sonarCloud-server') {
-                  sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+                  sh '''pwd
+                  ls
+                  $SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
                   -Dsonar.projectKey=$PROJECT_NAME \
                   -Dsonar.sources=. \
                   -Dsonar.language=py \
-                  -Dsonar.python.coverage.reportPaths=../coverage.xml'''
+                  -Dsonar.python.coverage.reportPaths=${WORKSPACE}/coverage.xml'''
                 }//end SonarQube proccess||*cov*.xml
               }//end {} in script
             }//end script
