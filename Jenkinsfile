@@ -20,16 +20,16 @@ pipeline {
     }//end first stage
   
    stage('Second') {
-      steps {          
-     script{
-       withCredentials([
-         string(
-           credentialsId: 'SC_Proyect',
-           variable: 'PROJECT_NAME'  ),
-         env.ORGANIZATION=string(
-           credentialsId: 'SC_Org'
-         ),
-        ])
+      steps {  
+        script{
+          withCredentials([
+            string(
+              credentialsId: 'SC_Proyect',
+              variable: 'PROJECT_NAME'  ),
+            string(
+              credentialsId: 'SC_Org',
+              variable: 'PROJECT_NAME'  ),
+          ])
           {
             
             withSonarQubeEnv('FP-sonarCloud-server') {
@@ -46,30 +46,42 @@ pipeline {
   
     stage('Third') {
       steps {
-            script{
-            //  {
-                sh ' cd $WORKSPACE '
-                sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
-                sh ' sudo apt install python3-pip'
-                sh ' sudo python3 -m pip install coverage '
-                sh ' sudo python3 -m pip install pytest '
-                sh ' coverage run -m pytest python/tests.py -v | coverage report | coverage xml'
-                withSonarQubeEnv('FP-sonarCloud-server') {
-                  sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
-                  -Dsonar.java.binaries=build/classes/java/ \
-                  -Dsonar.projectKey=$PROJECT_NAME \
-                  -Dsonar.python.coverage.reportPaths=$WORKSPACE/coverage.xml'''
-                }//end SonarQube proccess||*cov*.xml
-                
-             // }//end {} in script
-                 // -Dsonar.sources=. \
-                  //-Dsonar.language=py \
-            }//end script
-        }//end steps
+        script{
+          withCredentials([
+            string(
+              credentialsId: 'SC_Proyect',
+              variable: 'PROJECT_NAME'  ),
+            string(
+              credentialsId: 'SC_Org',
+              variable: 'PROJECT_NAME'  ),
+          ])
+          {
+            sh ' cd $WORKSPACE '
+            sh ' echo "Third Stage: make a coverage xml for the tests.py and send to sonarCloud" '
+            sh ' sudo apt install python3-pip'
+            sh ' sudo python3 -m pip install coverage '
+            sh ' sudo python3 -m pip install pytest '
+            sh ' coverage run -m pytest python/tests.py -v | coverage report | coverage xml'
+            withSonarQubeEnv('FP-sonarCloud-server') {
+              sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
+              -Dsonar.java.binaries=build/classes/java/ \
+              -Dsonar.projectKey=$PROJECT_NAME \
+              -Dsonar.python.coverage.reportPaths=$WORKSPACE/coverage.xml'''
+            }//end SonarQube proccess||*cov*.xml
+            env.QG=waitForQualityGate().status
+          }//end {} in script
+          // -Dsonar.sources=. \
+          //-Dsonar.language=py \
+        }//end script
+      }//end steps
     }//end stage Third
+    
     stage('Deployment') {
+      when{ 
+        environment name: 'QG', value: 'OK'
+      }//end when
       steps{
-            sh ' echo "Deployment Stage" '
+        sh 'echo "Deployment stage starts" '
       }//end steps
     }//end stage Deployment
   }//end stages
