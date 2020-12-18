@@ -72,6 +72,7 @@ pipeline {
                 sh 'cat coverage.xml'
                 sh 'cd $WORKSPACE '
                 sh ' pwd '
+                sh ' echo $WORKSPACE '
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
                   -Dsonar.java.binaries=build/classes/java/ \
