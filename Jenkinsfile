@@ -2,17 +2,6 @@ pipeline {
   agent any
   environment {
      SCANNER_HOME = tool 'FP-sonarCloud-scanner'
-     script{
-       withCredentials([
-         string(
-           credentialsId: 'SC_Proyect',
-           variable: 'PROJECT_NAME'  ),
-         string(
-           credentialsId: 'SC_Org',
-           variable: 'ORGANIZATION'
-         ),
-        ])
-     }//end script
    } //end environment var 
   stages {
    stage('First') {
@@ -33,14 +22,28 @@ pipeline {
    stage('Second') {
       steps {
         script{
-          //{
+          
+     script{
+       withCredentials([
+         string(
+           credentialsId: 'SC_Proyect',
+           variable: 'PN'  ),
+         string(
+           credentialsId: 'SC_Org',
+           variable: 'ORG'
+         ),
+        ])
+     }//end script
+          {
+            env.ORGANIZATION=$ORG
+            env.PROJECT_NAME=$PN
             withSonarQubeEnv('FP-sonarCloud-server') {
             sh ' echo "Second Stage> make a test on SonarCloud" '
             sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
             -Dsonar.java.binaries=build/classes/java/ \
             -Dsonar.projectKey=$PROJECT_NAME \
             -Dsonar.sources=.'''
-          // }//end SonarQube proccess
+           }//end SonarQube proccess
            }
         }//script end
       }//end steps
