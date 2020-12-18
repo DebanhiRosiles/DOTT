@@ -11,7 +11,7 @@ pipeline {
         script{   
             try{sh ' cd $WORKPLACE/python/ '
               sh ' ls'
-              sh '  docker build $WORKPLACE/python/ '-t pym . '
+              sh '  docker build $WORKPLACE/python/ -t pym . '
             }//end try check image
             catch(exc){
                sh ' echo "Couldnt build the image" '
