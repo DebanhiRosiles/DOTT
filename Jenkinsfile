@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+     SCANNER_HOME = tool 'FP-sonarCloud-scanner'
+  } //end environment var 
   stages {
    stage('First') {
       steps {
@@ -17,9 +20,6 @@ pipeline {
     }//end first stage
   
    stage('Second') {
-      environment {
-        SCANNER_HOME = tool 'FP-sonarCloud-scanner'
-      } //end environment var 
       steps {
         script{
           withCredentials([
@@ -45,9 +45,6 @@ pipeline {
     }// End stage Second
   
     stage('Third') {
-      environment {
-        SCANNER_HOME = tool 'FP-sonarCloud-scanner'
-      } //end environment var 
       steps {
             script{
               withCredentials([
@@ -80,5 +77,10 @@ pipeline {
             }//end script
         }//end steps
     }//end stage Third
+    stage('Deployment') {
+      steps{
+            sh ' echo "Deployment Stage" '
+      }//end steps
+    }//end stage Deployment
   }//end stages
 }//end pipeline
