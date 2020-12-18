@@ -21,7 +21,6 @@ pipeline {
         }//end script
       }//end step 
     }//end first stage
-    
     stage('SonarCloudTest') {
       when{
         environment name: 'NEXTSTAGE', value: '1'
