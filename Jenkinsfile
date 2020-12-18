@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment {
      SCANNER_HOME = tool 'FP-sonarCloud-scanner'
+     NEXTSTAGE='1'
    } //end environment var 
   stages {
    stage('Build') {
@@ -15,6 +16,7 @@ pipeline {
             }//end try check image
             catch(exc){
                sh ' echo "Couldnt build the image" '
+               $NEXTSTAGE='0'
             }//end catch to check port avaliable
         }//end script
       }//end step 
@@ -22,6 +24,9 @@ pipeline {
     
     stage('SonarCloudTest') {
       steps {
+        when{
+          environment name: 'NEXTSTAGE', value: '1'
+        }
         script{
           withCredentials([
             string(
