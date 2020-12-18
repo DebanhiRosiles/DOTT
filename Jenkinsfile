@@ -11,6 +11,7 @@ pipeline {
            credentialsId: 'SC_Org',
            variable: 'ORGANIZATION'
          ),
+        ])
      }//end script
    } //end environment var 
   stages {
