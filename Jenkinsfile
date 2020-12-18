@@ -28,7 +28,7 @@ pipeline {
               variable: 'PROJECT_NAME'  ),
             string(
               credentialsId: 'SC_Org',
-              variable: 'PROJECT_NAME'  ),
+              variable: 'ORGANIZATION'  ),
           ])
           {
             
@@ -53,7 +53,7 @@ pipeline {
               variable: 'PROJECT_NAME'  ),
             string(
               credentialsId: 'SC_Org',
-              variable: 'PROJECT_NAME'  ),
+              variable: 'ORGANIZATION'  ),
           ])
           {
             sh ' cd $WORKSPACE '
