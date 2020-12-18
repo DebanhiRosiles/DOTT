@@ -69,10 +69,6 @@ pipeline {
               ])
               {
                 sh ' coverage run -m pytest $WORSKPACE/tests.py -v | coverage report | coverage xml'
-                sh 'cat coverage.xml'
-                sh 'cd $WORKSPACE '
-                sh ' pwd '
-                sh ' echo $WORKSPACE '
                 withSonarQubeEnv('FP-sonarCloud-server') {
                   sh '''
                   $SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
