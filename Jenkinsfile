@@ -37,7 +37,7 @@ pipeline {
             sh ' sudo apt install python3-pip'
             sh ' sudo python3 -m pip install coverage '
             sh ' sudo python3 -m pip install pytest '
-            sh ' coverage run -m pytest python/tests.py -v | coverage report | coverage xml'
+            sh ' coverage run -m pytest $WORSKPACE/python/tests.py -v | coverage report | coverage xml'
             withSonarQubeEnv('FP-sonarCloud-server') {
               sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
               -Dsonar.java.binaries=build/classes/java/ \
@@ -63,7 +63,7 @@ pipeline {
         sh 'echo "Deployment stage starts" '
         script{
           try{
-            sh ' docker rm -f $ '
+            sh ' docker rm -f $CONTAINER_ID '
             try{
               sh ' docker run -d -p 8000:8000 pym'
             }catch(portAv){
